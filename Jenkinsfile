@@ -22,19 +22,26 @@ pipeline {
     stage('Get App Code') {
       steps {
         dir('APP') {
-          git branch: 'main', url: 'https://github.com/Prasanthreddy4a5/${APPNAME}'
+          git branch: 'main', url: 'https://github.com/raghudevopsb74/${APPNAME}'
         }
         dir('CHART') {
-          git branch: 'main', url: 'https://github.com/Prasanthreddy4a5/roboshop-helm'
+          git branch: 'main', url: 'https://github.com/raghudevopsb74/roboshop-helm'
         }
       }
     }
 
     stage('Helm Deploy') {
       steps {
-        sh 'helm upgrade -i ${APPNAME} ./CHART -f APP/helm/${ENV}.yaml --set APP_VERSION=${APP_VERSION}'  #APP is a directory
+        sh 'helm upgrade -i ${APPNAME} ./CHART --debug -f APP/helm/${ENV}.yaml --set APP_VERSION=${APP_VERSION}'
       }
     }
 
   }
+
+  post {
+    always {
+      cleanWs()
+    }
+  }
+
 }
